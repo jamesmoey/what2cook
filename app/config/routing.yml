@@ -1,0 +1,5 @@
+moey_cook_what:
+    resource: "@MoeyWhat2CookBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
