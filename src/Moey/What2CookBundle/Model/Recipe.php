@@ -34,8 +34,12 @@ class Recipe {
     public function addIngredient(Ingredient $ingredient)
     {
         if (!$this->ingredients->contains($ingredient)) {
-            $this->ingredients->add($ingredient);
-            $ingredient->setRecipe($this);
+            if (($i = $this->findIngredient($ingredient->getName())) !== null) {
+                $i->setAmount($i->getAmount() + $ingredient->getAmount());
+            } else {
+                $this->ingredients->add($ingredient);
+                $ingredient->setRecipe($this);
+            }
         }
         return $this;
     }

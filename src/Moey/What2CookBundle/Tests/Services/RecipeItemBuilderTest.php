@@ -1,13 +1,25 @@
 <?php
 namespace Moey\What2CookBundle\Tests\Services;
 
-use Moey\What2CookBundle\Services\RecipeBuilder;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use Moey\What2CookBundle\Services\RecipeItemBuilder;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class RecipeBuilderTest extends TestCase {
+class RecipeItemBuilderTest extends WebTestCase {
+
+    protected $validator;
+
+    /** @var RecipeItemBuilder */
+    protected $builder;
+
+    protected function setUp()
+    {
+        $this->validator = self::createClient()->getContainer()->get("validator");
+        $this->builder = new RecipeItemBuilder($this->validator);
+    }
+
+
     public function testBuildRecipeFromJson() {
-        $builder = new RecipeBuilder();
-        $list = $builder->buildRecipe('[
+        $list = $this->builder->buildRecipe('[
             {
                 "name": "grilled cheese on toast",
                 "ingredients": [
@@ -32,9 +44,8 @@ class RecipeBuilderTest extends TestCase {
     }
 
     public function testBuildInvalidJson() {
-        $this->setExpectedException('\Exception');
-        $builder = new RecipeBuilder();
-        $builder->buildRecipe('[
+        $this->setExpectedException('Moey\What2CookBundle\Exception\InvalidJsonException');
+        $this->builder->buildRecipe('[
             {
                 "name": "grilled cheese on toast",
                 "ingredients": [
@@ -54,9 +65,8 @@ class RecipeBuilderTest extends TestCase {
     }
 
     public function testBuildEmptyRecipe() {
-        $this->setExpectedException('\Exception');
-        $builder = new RecipeBuilder();
-        $builder->buildRecipe('[
+        $this->setExpectedException('Moey\What2CookBundle\Exception\InvalidRecipeException');
+        $this->builder->buildRecipe('[
             {
                 "name": "grilled cheese on toast",
                 "ingredients": [
@@ -74,8 +84,7 @@ class RecipeBuilderTest extends TestCase {
     }
 
     public function testBuildDuplicateIngredientRecipe() {
-        $builder = new RecipeBuilder();
-        $list = $builder->buildRecipe('[
+        $list = $this->builder->buildRecipe('[
             {
                 "name": "grilled cheese on toast",
                 "ingredients": [
@@ -94,7 +103,15 @@ class RecipeBuilderTest extends TestCase {
             }
         ]');
         $this->assertEquals(2, $list[1]->getIngredients()->count());
+    }
 
+    public function testBuildItemFromCsv() {
+        $list = $this->builder->buildItem("bread,10,slices,25/12/2014
+cheese,10,slices,25/12/2014
+butter,250,grams,25/12/2014
+peanut butter,250,grams,2/12/2014
+mixed salad,150,grams,26/12/2013");
+        $this->assertEquals(5, $list->count());
     }
 }
  
