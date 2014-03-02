@@ -1,13 +1,31 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
-</html>
+{% extends 'MopaBootstrapBundle::base.html.twig' %}
+
+{% block title %}What 2 Cook{% endblock %}
+
+{% block head_style %}
+    {% stylesheets
+        '@MopaBootstrapBundle/Resources/public/bootstrap/dist/css/bootstrap.min.css'
+        '@MopaBootstrapBundle/Resources/public/css/mopabootstrapbundle.css'
+    %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    {% endstylesheets %}
+    <link rel="stylesheet" type="text/css" href="/css/main.css" media="all">
+{% endblock head_style %}
+
+{% block headline %}What 2 Cook?{% endblock %}
+
+{% block footer %}
+    <p>&copy; <a href="https://github.com/jamesmoey" target="_blank">James Moey</a> 2014</p>
+{% endblock footer %}
+
+{% block head_script %}
+    <script type="text/javascript" src="/js/jquery-2.1.0.min.js"></script>
+{% endblock head_script %}
+
+{% block foot_script %}
+    {% javascripts
+    '@MopaBootstrapBundle/Resources/public/bootstrap/js/modal.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

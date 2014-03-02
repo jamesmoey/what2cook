@@ -113,5 +113,15 @@ peanut butter,250,grams,2/12/2014
 mixed salad,150,grams,26/12/2013");
         $this->assertEquals(5, $list->count());
     }
+
+    public function testBuildItemFromCsvMissingColumn() {
+        $this->setExpectedException('\Exception');
+        $list = $this->builder->buildItem("bread,10,25/12/2014");
+    }
+
+    public function testBuildItemFromCsvInvalidUnit() {
+        $this->setExpectedException('\Exception');
+        $list = $this->builder->buildItem("bread,10,slice,25/12/2014");
+    }
 }
  

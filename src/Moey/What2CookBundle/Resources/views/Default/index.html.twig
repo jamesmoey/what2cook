@@ -1,1 +1,60 @@
-Hello {{ name }}!
+{% extends '::base.html.twig' %}
+
+{% form_theme form 'MopaBootstrapBundle:Form:fields.html.twig' %}
+
+{% block content_row %}
+    {{ form_start(form) }}
+    <div class="row shadow">
+        <div class="col-sm-12">
+            {{ form_errors(form) }}
+        </div>
+    </div>
+    <div class="row shadow">
+        <div class="col-sm-12">
+            <div class="control-group">
+                {{ form_row(form.find, { attr: { class: "btn-success btn-lg"}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row shadow">
+        <div class="col-sm-5 well upload-block">
+            <h3>Upload your Item</h3>
+            {{ form_row(form.items, { label_render: false, horizontal_label_offset_class: false }) }}
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5 well upload-block">
+            <h3>Upload your Recipe</h3>
+            {{ form_row(form.recipes, { label_render: false, horizontal_label_offset_class: false }) }}
+        </div>
+    </div>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+    {% if app.session.flashbag.has("recipe") %}
+        <div id="recipe-modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h1>
+                            {% set recipe = app.session.flashbag.get("recipe") %}
+                            {% if recipe is null %}
+                            Order Takeout
+                            {% else %}
+                            {{ recipe.name|capitalize }}
+                            {% endif %}
+                        </h1>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            (function($) {
+                $(document).ready(function() {
+                    $('#recipe-modal').modal('show');
+                });
+            })(jQuery);
+        </script>
+    {% endif %}
+{% endblock %}

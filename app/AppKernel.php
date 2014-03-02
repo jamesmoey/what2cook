@@ -13,6 +13,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new \Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             new Moey\What2CookBundle\MoeyWhat2CookBundle(),
         );
 
